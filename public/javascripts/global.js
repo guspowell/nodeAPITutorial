@@ -6,6 +6,8 @@ $(document).ready(function() {
 
   $('#userList table tbody').on('click', 'td a.linkshowuser', showUserInfo);
 
+  $('#btnAddUser').on('click', addUser);
+
 });
 
 function populateTable() {
@@ -33,9 +35,55 @@ function showUserInfo(event) {
 
   var thisUserObject = userListData[arrayPosition];
 
-  $('#userInfoName').text(thisUserObject.fullname);
+  $('#userInfoUserName').text(thisUserObject.username);
+  $('#userInfoEmail').text(thisUserObject.email);
+  $('#userInfoFullName').text(thisUserObject.fullname);
   $('#userInfoAge').text(thisUserObject.age);
   $('#userInfoGender').text(thisUserObject.gender);
   $('#userInfoLocation').text(thisUserObject.location);
+};
+
+function addUser(event) {
+
+  alert('success');
+
+  event.preventDefault();
+
+  var errorCount = 0;
+
+  $('#adduser input').each(function(index, val) {
+    if($(this).val === '') { errorCount++; }
+  });
+
+  if(errorCount === 0) {
+    var newUser = {
+      'username': $('#addUser fieldset input#inputUserName').val(),
+      'email': $('#addUser fieldset input#inputUserEmail').val(),
+      'fullname': $('#addUser fieldset input#inputUserFullname').val(),
+      'age': $('#addUser fieldset input#inputUserAge').val(),
+      'location': $('#addUser fieldset input#inputUserLocation').val(),
+      'gender': $('#addUser fieldset input#inputUserGender').val()
+    }
+
+    $.ajax({
+      type: 'POST',
+      data: newUser,
+      url: '/users/adduser',
+      dataType: 'JSON'
+    }).done(function( response ) {
+      if(response.msg === '') {     // Check for successful (blank) response
+        $('#addUser fieldset input').val('');   // Clear the form inputs
+        populateTable();
+      }
+      else {  // If something goes wrong, alert the error message that our service returned
+        alert('Error: ' + response.msg);
+      }
+    });
+  }
+
+  else {  // If errorCount is more than 0, error out
+    alert('Please Fill in all the fields');
+    return false;
+  }
 
 };
