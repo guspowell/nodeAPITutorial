@@ -35,9 +35,7 @@ function showUserInfo(event) {
 
   var thisUserObject = userListData[arrayPosition];
 
-  $('#userInfoUserName').text(thisUserObject.username);
-  $('#userInfoEmail').text(thisUserObject.email);
-  $('#userInfoFullName').text(thisUserObject.fullname);
+  $('#userInfoName').text(thisUserObject.fullname);
   $('#userInfoAge').text(thisUserObject.age);
   $('#userInfoGender').text(thisUserObject.gender);
   $('#userInfoLocation').text(thisUserObject.location);
@@ -53,13 +51,11 @@ function addUser(event) {
     if($(this).val() === '') { errorCount++; }
   });
 
-  console.log(errorCount);
-
   if(errorCount === 0) {
     var newUser = {
       'username': $('#addUser fieldset input#inputUserName').val(),
       'email': $('#addUser fieldset input#inputUserEmail').val(),
-      'fullname': $('#addUser fieldset input#inputUserFullname').val(),
+      'fullname': $('#addUser fieldset input#inputUserFullName').val(),
       'age': $('#addUser fieldset input#inputUserAge').val(),
       'location': $('#addUser fieldset input#inputUserLocation').val(),
       'gender': $('#addUser fieldset input#inputUserGender').val()
