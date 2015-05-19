@@ -45,15 +45,15 @@ function showUserInfo(event) {
 
 function addUser(event) {
 
-  alert('success');
-
   event.preventDefault();
 
   var errorCount = 0;
 
-  $('#adduser input').each(function(index, val) {
-    if($(this).val === '') { errorCount++; }
+  $('#addUser input').each(function(index, val) {  //function not working!
+    if($(this).val() === '') { errorCount++; }
   });
+
+  console.log(errorCount);
 
   if(errorCount === 0) {
     var newUser = {
