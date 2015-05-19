@@ -8,6 +8,8 @@ $(document).ready(function() {
 
   $('#btnAddUser').on('click', addUser);
 
+  $('#userList table tbody').on('click', 'td a.linkdeleteuser', deleteUser);
+
 });
 
 function populateTable() {
@@ -17,11 +19,10 @@ function populateTable() {
     userListData = data;
 
     $.each(data, function() {
-      console.log(tableContent);
       tableContent += '<tr>';
       tableContent += '<td><a href="#" class="linkshowuser" rel="'+ this.username +'">'+ this.username +'</a></td>';
       tableContent += '<td>' + this.email + '</td>';
-      tableContent += '<td><a href="#" class="linkdeleteuser" rel="' + this.id + '">delete</a></td>';
+      tableContent += '<td><a href="#" class="linkdeleteuser" rel="' + this._id + '">delete</a></td>';
       tableContent += '<tr>';
     });
 
@@ -80,6 +81,36 @@ function addUser(event) {
 
   else {  // If errorCount is more than 0, error out
     alert('Please Fill in all the fields');
+    return false;
+  }
+
+};
+
+function deleteUser(event) {
+  event.preventDefault();
+  var confirmation = confirm('Are you sure you want to delete this user?');
+
+  if (confirmation === true) {
+
+    console.log($(this));
+
+    $.ajax({
+      type: 'DELETE',
+      url: '/users/deleteuser/' + $(this).attr('rel')
+    }).done(function(response) {
+
+      if (response.msg === '') {
+      }
+      else {
+        alert('Error: ' + response.msg);
+      }
+
+      populateTable();
+
+    });
+  }
+
+  else {
     return false;
   }
 
