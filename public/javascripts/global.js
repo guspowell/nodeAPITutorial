@@ -1,7 +1,6 @@
 var userListDate = [];
 
 $(document).ready(function() {
-
   populateTable();
 
   $('#userList table tbody').on('click', 'td a.linkshowuser', showUserInfo);
@@ -10,6 +9,8 @@ $(document).ready(function() {
 
   $('#userList table tbody').on('click', 'td a.linkdeleteuser', deleteUser);
 
+  $('#userList table tbody').on('click', 'td a.linkupdateuser', populateUpdateForm);
+  $('#btnUpdateUser').on('click', updateUserInfo);
 });
 
 function populateTable() {
@@ -23,6 +24,7 @@ function populateTable() {
       tableContent += '<td><a href="#" class="linkshowuser" rel="'+ this.username +'">'+ this.username +'</a></td>';
       tableContent += '<td>' + this.email + '</td>';
       tableContent += '<td><a href="#" class="linkdeleteuser" rel="' + this._id + '">delete</a></td>';
+      tableContent += '<td><a href="#" class="linkupdateuser" rel="' + this._id + '">update</a></td>';
       tableContent += '<tr>';
     });
 
@@ -44,7 +46,6 @@ function showUserInfo(event) {
 };
 
 function addUser(event) {
-
   event.preventDefault();
 
   var errorCount = 0;
@@ -113,5 +114,26 @@ function deleteUser(event) {
   else {
     return false;
   }
+};
 
+function populateUpdateForm(event) {
+  event.preventDefault();
+  var thisUserId = $(this).attr('rel');
+  var arrayPosition = userListData.map(function(arrayItem) { return arrayItem._id; }).indexOf(thisUserId);
+  var thisUserObject = userListData[arrayPosition];
+  var userValues = {
+    'inputUserName': thisUserObject.username,
+    'inputUserEmail': thisUserObject.email,
+    'inputUserFullName': thisUserObject.fullname,
+    'inputUserAge': thisUserObject.age,
+    'inputUserLocation': thisUserObject.location,
+    'inputUserGender': thisUserObject.gender
+  }
+  $('#updateUser fieldset').find('input').val(function(index, value) {
+    return userValues[this.id]
+  });
+};
+
+function updateUserInfo(event) {
+  event.preventDefault;
 };
