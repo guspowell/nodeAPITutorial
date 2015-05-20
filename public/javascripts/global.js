@@ -50,9 +50,11 @@ function addUser(event) {
 
   var errorCount = 0;
 
-  $('#addUser input').each(function(index, val) {  //function not working!
+  $('#addUser input').each(function(index, val) {
     if($(this).val() === '') { errorCount++; }
   });
+
+  console.log(errorCount);
 
   if(errorCount === 0) {
     var newUser = {
@@ -93,8 +95,6 @@ function deleteUser(event) {
 
   if (confirmation === true) {
 
-    console.log($(this));
-
     $.ajax({
       type: 'DELETE',
       url: '/users/deleteuser/' + $(this).attr('rel')
@@ -132,8 +132,49 @@ function populateUpdateForm(event) {
   $('#updateUser fieldset').find('input').val(function(index, value) {
     return userValues[this.id]
   });
+
+  $('#btnUpdateUser').attr('rel', thisUserId);
 };
 
 function updateUserInfo(event) {
   event.preventDefault;
+  var errorCount = 0;
+
+  $('#updateUser input').each(function(index, val) {
+    if($(this).val() === '') { errorCount++; }
+  });
+
+  if(errorCount === 0) {
+
+    var updatedUser = {
+      'username': $('#updateUser fieldset input#inputUserName').val(),
+      'email': $('#updateUser fieldset input#inputUserEmail').val(),
+      'fullname': $('#updateUser fieldset input#inputUserFullName').val(),
+      'age': $('#updateUser fieldset input#inputUserAge').val(),
+      'location': $('#updateUser fieldset input#inputUserLocation').val(),
+      'gender': $('#updateUser fieldset input#inputUserGender').val()
+    };
+
+    console.log(this);
+
+    $.ajax({
+      type: 'PUT',
+      data: updatedUser,
+      url: '/users/updateuser/' + $(this).attr('rel'),
+      dataType: 'JSON'
+    }).done(function( response ) {
+      if(response.msg === '') {     // Check for successful (blank) response
+        $('#updateUser fieldset input').val('');   // Clear the form inputs
+        populateTable();
+      }
+      else {  // If something goes wrong, alert the error message that our service returned
+        alert('Error: ' + response.msg);
+      }
+    });
+  }
+  else {  // If errorCount is more than 0, error out
+    alert('Please Fill in all the fields');
+    return false;
+  }
+
 };

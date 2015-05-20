@@ -26,4 +26,12 @@ router.delete('/deleteuser/:id', function(req, res) {
   });
 });
 
+router.put('/updateuser/:id', function(req, res) {
+  var db = req.db;
+  var userToUpdate = req.params.id;
+  db.collection('userlist').updateById(userToUpdate, req.body, function(err, result) {
+    res.send((result === 1) ? { msg: ''} : {msg: 'error: ' + err});
+  });
+});
+
 module.exports = router;
