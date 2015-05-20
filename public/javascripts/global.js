@@ -118,6 +118,7 @@ function deleteUser(event) {
 
 function populateUpdateForm(event) {
   event.preventDefault();
+  $('#updateUser').css('display', 'block');
   var thisUserId = $(this).attr('rel');
   var arrayPosition = userListData.map(function(arrayItem) { return arrayItem._id; }).indexOf(thisUserId);
   var thisUserObject = userListData[arrayPosition];
